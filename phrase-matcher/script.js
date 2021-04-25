@@ -24,11 +24,12 @@ function randomPhrase() {
   return number;
 }
 
+let i = 0
 function testSpeech() {
   testBtn.disabled = true;
   testBtn.textContent = 'Test in progress';
 
-  var phrase = phrases[randomPhrase()];
+  var phrase = phrases[i];
   // To ensure case consistency while checking with the returned output text
   phrase = phrase.toLowerCase();
   phrasePara.textContent = phrase;
@@ -56,13 +57,15 @@ function testSpeech() {
     // These also have getters so they can be accessed like arrays.
     // The second [0] returns the SpeechRecognitionAlternative at position 0.
     // We then return the transcript property of the SpeechRecognitionAlternative object 
+    console.log('🚀', event)
     var speechResult = event.results[0][0].transcript.toLowerCase();
     diagnosticPara.textContent = 'Speech received: ' + speechResult + '.';
     if(speechResult === phrase) {
-      resultPara.textContent = 'I heard the correct phrase!';
+      resultPara.textContent = `I heard the correct phrase! (${Math.floor(event.results[0][0].confidence*100)}%)`;
       resultPara.style.background = 'lime';
+      i++;
     } else {
-      resultPara.textContent = 'That didn\'t sound right.';
+      resultPara.textContent = `That didn\'t sound right. (${Math.floor(event.results[0][0].confidence*100)}%)`;
       resultPara.style.background = 'red';
     }
 
